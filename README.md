@@ -20,9 +20,9 @@ Mp4Coder，H264和AAC合成MP4视频库
    }
 
 ```
+
 也可以根据实际情况自定义帧率：
 ```
-
  H264TrackImpl h264Track1 = new H264TrackImpl(new FileDataSourceImpl(Environment.getExternalStorageDirectory() + "/video.h264"), "eng", 15000, 1001);
  
 给出源码解释：
