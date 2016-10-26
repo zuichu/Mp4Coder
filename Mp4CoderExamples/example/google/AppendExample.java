@@ -1,0 +1,153 @@
+package me.zuichu.mp4coder.example.google;
+
+
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import me.zuichu.mp4coder.Container;
+import me.zuichu.mp4coder.muxer.Movie;
+import me.zuichu.mp4coder.muxer.Track;
+import me.zuichu.mp4coder.muxer.builder.DefaultMp4Builder;
+import me.zuichu.mp4coder.muxer.container.mp4.MovieCreator;
+import me.zuichu.mp4coder.muxer.tracks.AppendTrack;
+
+/**
+ *
+ */
+public class AppendExample {
+    public static void main(String[] args) throws IOException {
+
+
+        String[] videoUris = new String[]{
+
+                "c:\\content\\20150930_161515.mp4",
+                "c:\\content\\20150930_161525.mp4",
+                "c:\\content\\20150930_161529.mp4",
+                "c:\\content\\20150930_161534.mp4",
+                "c:\\content\\20150930_161543.mp4",
+                "c:\\content\\20151001_135436.mp4",
+                "c:\\content\\20151001_135446.mp4",
+                "c:\\content\\20150930_161515.mp4",
+                "c:\\content\\20150930_161525.mp4",
+                "c:\\content\\20150930_161529.mp4",
+                "c:\\content\\20150930_161534.mp4",
+                "c:\\content\\20150930_161543.mp4",
+                "c:\\content\\20151001_135436.mp4",
+                "c:\\content\\20151001_135446.mp4",
+                "c:\\content\\20150930_161515.mp4",
+                "c:\\content\\20150930_161525.mp4",
+                "c:\\content\\20150930_161529.mp4",
+                "c:\\content\\20150930_161534.mp4",
+                "c:\\content\\20150930_161543.mp4",
+                "c:\\content\\20151001_135436.mp4",
+                "c:\\content\\20151001_135446.mp4",
+                "c:\\content\\20150930_161515.mp4",
+                "c:\\content\\20150930_161525.mp4",
+                "c:\\content\\20150930_161529.mp4",
+                "c:\\content\\20150930_161534.mp4",
+                "c:\\content\\20150930_161543.mp4",
+                "c:\\content\\20151001_135436.mp4",
+                "c:\\content\\20151001_135446.mp4",
+                "c:\\content\\20150930_161515.mp4",
+                "c:\\content\\20150930_161525.mp4",
+                "c:\\content\\20150930_161529.mp4",
+                "c:\\content\\20150930_161534.mp4",
+                "c:\\content\\20150930_161543.mp4",
+                "c:\\content\\20151001_135436.mp4",
+                "c:\\content\\20151001_135446.mp4",
+                "c:\\content\\20150930_161515.mp4",
+                "c:\\content\\20150930_161525.mp4",
+                "c:\\content\\20150930_161529.mp4",
+                "c:\\content\\20150930_161534.mp4",
+                "c:\\content\\20150930_161543.mp4",
+                "c:\\content\\20151001_135436.mp4",
+                "c:\\content\\20151001_135446.mp4",
+                "c:\\content\\20150930_161515.mp4",
+                "c:\\content\\20150930_161525.mp4",
+                "c:\\content\\20150930_161529.mp4",
+                "c:\\content\\20150930_161534.mp4",
+                "c:\\content\\20150930_161543.mp4",
+                "c:\\content\\20151001_135436.mp4",
+                "c:\\content\\20151001_135446.mp4",
+                "c:\\content\\20150930_161515.mp4",
+                "c:\\content\\20150930_161525.mp4",
+                "c:\\content\\20150930_161529.mp4",
+                "c:\\content\\20150930_161534.mp4",
+                "c:\\content\\20150930_161543.mp4",
+                "c:\\content\\20151001_135436.mp4",
+                "c:\\content\\20151001_135446.mp4",
+                "c:\\content\\20150930_161515.mp4",
+                "c:\\content\\20150930_161525.mp4",
+                "c:\\content\\20150930_161529.mp4",
+                "c:\\content\\20150930_161534.mp4",
+                "c:\\content\\20150930_161543.mp4",
+                "c:\\content\\20151001_135436.mp4",
+                "c:\\content\\20151001_135446.mp4",
+                "c:\\content\\20150930_161515.mp4",
+                "c:\\content\\20150930_161525.mp4",
+                "c:\\content\\20150930_161529.mp4",
+                "c:\\content\\20150930_161534.mp4",
+                "c:\\content\\20150930_161543.mp4",
+                "c:\\content\\20151001_135436.mp4",
+                "c:\\content\\20151001_135446.mp4",
+                "c:\\content\\20150930_161515.mp4",
+                "c:\\content\\20150930_161525.mp4",
+                "c:\\content\\20150930_161529.mp4",
+                "c:\\content\\20150930_161534.mp4",
+                "c:\\content\\20150930_161543.mp4",
+                "c:\\content\\20151001_135436.mp4",
+                "c:\\content\\20151001_135446.mp4",
+                "c:\\content\\20150930_161515.mp4",
+                "c:\\content\\20150930_161525.mp4",
+                "c:\\content\\20150930_161529.mp4",
+                "c:\\content\\20150930_161534.mp4",
+                "c:\\content\\20150930_161543.mp4",
+                "c:\\content\\20151001_135436.mp4",
+                "c:\\content\\20151001_135446.mp4",
+                "c:\\content\\20151001_135540.mp4"
+
+        };
+
+        List<Movie> inMovies = new ArrayList<Movie>();
+        for (String videoUri : videoUris) {
+            inMovies.add(MovieCreator.build(videoUri));
+        }
+
+        List<Track> videoTracks = new LinkedList<Track>();
+        List<Track> audioTracks = new LinkedList<Track>();
+
+        for (Movie m : inMovies) {
+            for (Track t : m.getTracks()) {
+                if (t.getHandler().equals("soun")) {
+                    audioTracks.add(t);
+                }
+                if (t.getHandler().equals("vide")) {
+                    videoTracks.add(t);
+                }
+            }
+        }
+
+        Movie result = new Movie();
+
+        if (!audioTracks.isEmpty()) {
+            result.addTrack(new AppendTrack(audioTracks.toArray(new Track[audioTracks.size()])));
+        }
+        if (!videoTracks.isEmpty()) {
+            result.addTrack(new AppendTrack(videoTracks.toArray(new Track[videoTracks.size()])));
+        }
+
+        Container out = new DefaultMp4Builder().build(result);
+
+        FileChannel fc = new RandomAccessFile(String.format("output.mp4"), "rw").getChannel();
+        out.writeContainer(fc);
+        fc.close();
+
+
+    }
+
+
+}
