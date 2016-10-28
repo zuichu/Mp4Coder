@@ -2,7 +2,7 @@
 Mp4Coder，H264和AAC合成MP4视频库
 
 
-###2016.1.26更新库：    
+###2016.10.26更新库：    
   
 支持流媒体AAC音频合成
 
@@ -66,6 +66,62 @@ Mp4Coder，H264和AAC合成MP4视频库
    
    
 可以实现H264编码视频文件和AAC音频文件合成为MP4视频文件，也可以实现多个mp4文件拼接。  
+
+```
+//拼接示例  
+
+ List<String> fileList = new ArrayList<String>();
+        List<Movie> moviesList = new LinkedList<Movie>();
+        fileList.add(Environment.getExternalStorageDirectory() + "/1.mp4");
+        fileList.add(Environment.getExternalStorageDirectory() + "/2.mp4");
+        try {
+            for (String file : fileList) {
+                moviesList.add(MovieCreator.build(file));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        List<Track> videoTracks = new LinkedList<Track>();
+        List<Track> audioTracks = new LinkedList<Track>();
+        for (Movie m : moviesList) {
+            for (Track t : m.getTracks()) {
+                if (t.getHandler().equals("soun")) {
+                    audioTracks.add(t);
+                }
+                if (t.getHandler().equals("vide")) {
+                    videoTracks.add(t);
+                }
+            }
+        }
+
+        Movie result = new Movie();
+
+        try {
+            if (audioTracks.size() > 0) {
+                result.addTrack(new AppendTrack(audioTracks.toArray(new Track[audioTracks.size()])));
+            }
+            if (videoTracks.size() > 0) {
+                result.addTrack(new AppendTrack(videoTracks.toArray(new Track[videoTracks.size()])));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Container out = new DefaultMp4Builder().build(result);
+
+        try {
+            FileChannel fc = new FileOutputStream(new File(Environment.getExternalStorageDirectory() + "/encode.mp4")).getChannel();
+            out.writeContainer(fc);
+            fc.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        moviesList.clear();
+        fileList.clear();
+
+```
 
 可使用aar库，方便些。  
 此为Android库  
