@@ -5,7 +5,9 @@ Mp4Coder，H264和AAC合成MP4视频库
   
 遵循：[BY-NC-SA](https://creativecommons.org/licenses/by-nc-sa/4.0/)  
 
-[署名-非商业性使用-相同方式共享  4.0协议](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+[署名-非商业性使用-相同方式共享  4.0协议](https://creativecommons.org/licenses/by-nc-sa/4.0/)  
+  
+<small>(商用请发邮件说明，保留署名)</small>
 
 ###2016.10.26更新库：    
   
