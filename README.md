@@ -123,5 +123,41 @@ Mp4Coder，H264和AAC合成MP4视频库
 
 ```
 
+   
+MP4文件的信息解析  
+  
+```
+  
+  String localFilePath = Environment.getExternalStorageDirectory() + "/test.mp4";
+        IsoFile isoFile = null;
+        try {
+            isoFile = new IsoFile(new RandomAccessFile(localFilePath, "r").getChannel());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (isoFile == null) {
+            Log.i("info", "isoFile == null");
+            return;
+        }
+
+        List<Box> boxes = isoFile.getBoxes();
+        Log.i("info", "box size:" + boxes.size());
+        MovieBox moov = isoFile.getBoxes(MovieBox.class).get(0);
+        if (moov != null) {
+            int nLen = moov.getBoxes().size();
+            Log.i("info", "movie box:" + nLen);
+            MovieHeaderBox hb = moov.getMovieHeaderBox();
+            Log.i("info", "MovieHeaderBox:" + hb);
+            Log.d("info", "duration:" + hb.getDuration());
+        }
+    }
+      
+      
+
+```
+  
+  
+
 可使用aar库，方便些。  
 此为Android库  
