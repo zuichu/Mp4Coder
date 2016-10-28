@@ -321,6 +321,34 @@ MP4文件的剪切
 
 ```
   
+    
+MP4文件提取AAC音频文件
+  
+```
+  
+  List<Track> audioTracks = new LinkedList<Track>();
+        try {
+            Movie movie = MovieCreator.build(Environment.getExternalStorageDirectory() + "/input.mp4");
+            for (Track t : movie.getTracks()) {
+                if (t.getHandler().equals("soun")) {
+                    audioTracks.add(t);
+                }
+            }
+            Movie result = new Movie();
+            if (audioTracks.size() > 0) {
+                result.addTrack(new AppendTrack(audioTracks.toArray(new Track[audioTracks.size()])));
+            }
+            Container out = new DefaultMp4Builder().build(result);
+            FileChannel fc = new FileOutputStream(new File(Environment.getExternalStorageDirectory() + "/output.aac")).getChannel();
+            out.writeContainer(fc);
+            fc.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+  
+```  
+
 
 可使用aar库，方便些。  
 此为Android库  
